@@ -8,8 +8,36 @@
 		<script src="index.js" defer></script>
 	</head>
 	<body>
-		<main class="flex flex-col justify-center p-44 text-center">
-			<h1>To-Do</h1>
+		<main class="flex flex-col px-40 py-20 text-center gap-y-10">
+			<h1 class="text-6xl">To-Do</h1>
+			<div
+				class="border-2 border-black rounded-[50px] flex flex-col gap-y-4 py-6 overflow-hidden items-center justify-evenly"
+			>
+				<div class="flex px-10 w-full">
+					<img src="../svgs/add_circle.svg" alt="add new list" />
+				</div>
+				<div class="border-2 border-black rounded-4xl w-9/10 overflow-hidden flex flex-col items-center">
+					<div class="px-7 py-3 h-12 flex items-center justify-between w-full">
+						<div class="flex gap-x-3 items-center">
+							<img src="../svgs/arrow_drop_down.svg" alt="expand to view tasks">
+							<h2 class="text-2xl">List Name</h2>
+						</div>
+						<div class="flex justify-center gap-x-3">
+							<img src="../svgs/sweep.svg" alt="clear all completed tasks in this list">
+							<img src="../svgs/add.svg" alt="add a task to this list">
+							<img src="../svgs/delete.svg" alt="delete this list">
+						</div>
+					</div>
+
+					<div class="flex justify-between p-1 border-2 border-black w-9/10 mb-3 rounded-2xl">
+						<div class="flex items-center gap-x-3">
+							<img src="../svgs/menu.svg" alt="reorder drag drop">
+							<img src="../svgs/menu.svg" alt="reorder drag drop">
+							<h2 class="text-2xl">List Name</h2>
+						</div>
+					</div>
+				</div>
+			</div>
 		</main>
 	</body>
 </html>
