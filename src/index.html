@@ -4,15 +4,75 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>To-Do App</title>
-		<link href="style.css" rel="stylesheet" />
+		<link href="output.css" rel="stylesheet" />
 		<script src="index.js" defer></script>
 	</head>
 	<body>
-		<main class="px-40 py-20 flex flex-col items-center gap-y-10">
-			<h1>To-Do</h1>
-			<div class="flex border-2 border-black rounded-4xl">
-
-            </div>
+		<main class="flex flex-col px-40 py-20 text-center gap-y-10">
+			<h1 class="text-6xl">To-Do</h1>
+			<div class="border-2 border-black rounded-[50px] overflow-hidden py-6">
+				<div class="flex px-10 w-full pb-3">
+					<img class="svg" src="../svgs/add_circle.svg" alt="add new list" onclick="List.createList()" />
+				</div>
+				<div id="lists-container" class=" flex flex-col gap-y-4 items-center justify-evenly w-full">
+					<!--List-->
+					<div class="border-2 border-black rounded-4xl w-9/10 overflow-hidden flex flex-col items-center">
+						<div class="px-7 py-3 h-14 flex items-center justify-between w-full">
+							<div class="flex gap-x-3 items-center">
+								<img class="svg" src="../svgs/arrow_drop_down.svg" alt="expand to view tasks" />
+								<h2 class="text-2xl">List Name</h2>
+							</div>
+							<div class="flex justify-center gap-x-3">
+								<img class="svg" src="../svgs/sweep.svg" alt="clear all completed tasks in this list" />
+								<img class="svg" src="../svgs/add.svg" alt="add a task to this list" />
+								<img class="svg" src="../svgs/delete.svg" alt="delete this list" />
+							</div>
+						</div>
+						<!--Task-->
+						<div class="flex justify-between py-1 px-3 border-2 border-black w-9/10 mb-3 rounded-2xl h-12">
+							<div class="flex items-center gap-x-3">
+								<img class="svg" src="../svgs/menu.svg" alt="reorder drag drop" />
+								<img class="svg" src="../svgs/check_box_outline_blank.svg" alt="complete this task as done" />
+								<h2 class="text-xl">Task</h2>
+							</div>
+							<div class="flex items-center gap-x-3">
+								<img class="svg" src="../svgs/close.svg" alt="clear tasks marked as complete in this list" />
+								<img class="svg" src="../svgs/edit.svg" alt="edit the name of this task" />
+								<img class="svg" src="../svgs/delete.svg" alt="delete this task" />
+							</div>
+						</div>
+					</div>
+					<!---->
+					<!--List-->
+					<div class="border-2 border-black rounded-4xl w-9/10 overflow-hidden flex flex-col items-center">
+						<div class="px-7 py-3 h-14 flex items-center justify-between w-full">
+							<div class="flex gap-x-3 items-center">
+								<img class="svg" src="../svgs/arrow_drop_down.svg" alt="expand to view tasks" />
+								<input type="text" class="text-2xl" placeholder="List Name" />
+							</div>
+							<div class="flex justify-center gap-x-3">
+								<img class="svg" src="../svgs/sweep.svg" alt="clear all completed tasks in this list" />
+								<img class="svg" src="../svgs/add.svg" alt="add a task to this list" />
+								<img class="svg" src="../svgs/delete.svg" alt="delete this list" />
+							</div>
+						</div>
+						<!--Task-->
+						<div class="flex justify-between py-1 px-3 border-2 border-black w-9/10 mb-3 rounded-2xl h-12">
+							<div class="flex items-center gap-x-3">
+								<img class="svg" src="../svgs/menu.svg" alt="reorder drag drop" />
+								<img class="svg" src="../svgs/check_box_outline_blank.svg" alt="complete this task as done" />
+								<input class="text-xl" placeholder="Task" />
+							</div>
+							<div class="flex items-center gap-x-3">
+								<img class="svg" src="../svgs/close.svg" alt="clear tasks marked as complete in this list" />
+								<img class="svg" src="../svgs/edit.svg" alt="edit the name of this task" />
+								<img class="svg" src="../svgs/delete.svg" alt="delete this task" />
+							</div>
+						</div>
+					</div>
+					<!---->
+				</div>
+			</div>
 		</main>
 	</body>
 </html>
