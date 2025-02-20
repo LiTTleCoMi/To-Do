@@ -8,7 +8,7 @@ class List {
 	}
 
 	static createList() {
-		let id = String(Date.now());
+		let id = `${Date.now()}`;
 		let myList = new List(id);
 		lists.push(myList);
 		const listsElement = document.getElementById("lists-container");
@@ -31,29 +31,30 @@ class List {
 			.getElementById(id + "-name")
 			.querySelector("input");
 		inputElement.focus();
-        inputElement.addEventListener("blur", () => List.updateListName(id));
+		inputElement.addEventListener("blur", () => List.updateListName(id));
 	}
 
 	static updateListName(id, setting = "input") {
-        const listElement = document.getElementById(`${id}-name`);
+		const listElement = document.getElementById(`${id}-name`);
 		const list = lists.find((item) => item.id === id);
 		if (setting === "input") {
-            const inputElement = listElement.querySelector("input");
-            list.name = inputElement.value === '' ? "Unnamed List" : inputElement.value;
-            listElement.innerHTML = `<span class="text-2xl">${list.name}</span>`
+			const inputElement = listElement.querySelector("input");
+			list.name = inputElement.value === "" ? "Unnamed List" : inputElement.value;
+			this.loadLists();
 		} else if (setting === "span") {
-            listElement.innerHTML = `<input type="text" class="text-2xl" placeholder="List Name" />`;
-            const inputElement = listElement.querySelector("input");
-            inputElement.value = list.name;
-            inputElement.focus();
-            inputElement.addEventListener("blur", () => List.updateListName(id))
+			listElement.innerHTML = `<input type="text" class="text-2xl" placeholder="List Name" />`;
+			const inputElement = listElement.querySelector("input");
+			inputElement.value = list.name;
+			inputElement.focus();
+			inputElement.addEventListener("blur", () => this.updateListName(id));
 		}
-    }
+	}
 
-    static deleteList(id) {
-		const list = lists.find((item) => item.id === id);
-
-    }
+	static deleteList(id) {
+        lists = lists.filter(item => item.id != id);
+        console.log()
+        this.loadLists();
+	}
 
 	static loadLists() {
 		const listsElement = document.getElementById("lists-container");
@@ -69,7 +70,7 @@ class List {
                     <div class="flex justify-center gap-x-3">
                         <img onclick="List.updateListName('${list.id}', 'span')" class="svg" src="../svgs/edit.svg" alt="edit the name of this task" />
                         <img class="svg" src="../svgs/add.svg" alt="add a task to this list" />
-                        <img class="svg" src="../svgs/delete.svg" alt="delete this list" />
+                        <img onclick="List.deleteList(${list.id})" class="svg" src="../svgs/delete.svg" alt="delete this list" />
                     </div>
                 </div>
             </div>`;
