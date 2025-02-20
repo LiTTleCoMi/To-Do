@@ -13,8 +13,8 @@ class List {
 		lists.push(myList);
 		const listsElement = document.getElementById("lists-container");
 		listsElement.innerHTML += `
-        <div class="border-2 border-black rounded-4xl w-9/10 overflow-hidden flex flex-col items-center">
-                <div id="${id}" class="px-7 py-3 h-14 flex items-center justify-between w-full">
+        <div id=${id} class="border-2 border-black rounded-4xl w-9/10 overflow-hidden flex flex-col items-center">
+                <div id="${id}-list" class="px-7 py-3 h-14 flex items-center justify-between w-full">
                     <div class="flex gap-x-3 items-center">
                         <img class="svg" src="../svgs/arrow_drop_down.svg" alt="expand to view tasks" />
                         <div id="${id}-name"><input type="text" class="text-2xl" placeholder="List Name" /></div>
@@ -31,13 +31,7 @@ class List {
 			.getElementById(id + "-name")
 			.querySelector("input");
 		inputElement.focus();
-        inputElement.addEventListener("blur", () => myList.updateListName(id));
-	}
-
-	updateListName(id) {
-		const listElement = document.getElementById(`${id}-name`);
-		this.name = listElement.querySelector("input").value;
-		listElement.innerHTML = `<span class="text-2xl">${this.name}</span>`;
+        inputElement.addEventListener("blur", () => List.updateListName(id));
 	}
 
 	static updateListName(id, setting = "input") {
@@ -45,7 +39,7 @@ class List {
 		const list = lists.find((item) => item.id === id);
 		if (setting === "input") {
             const inputElement = listElement.querySelector("input");
-            list.name = inputElement.value;
+            list.name = inputElement.value === '' ? "Unnamed List" : inputElement.value;
             listElement.innerHTML = `<span class="text-2xl">${list.name}</span>`
 		} else if (setting === "span") {
             listElement.innerHTML = `<input type="text" class="text-2xl" placeholder="List Name" />`;
@@ -54,15 +48,20 @@ class List {
             inputElement.focus();
             inputElement.addEventListener("blur", () => List.updateListName(id))
 		}
-	}
+    }
+
+    static deleteList(id) {
+		const list = lists.find((item) => item.id === id);
+
+    }
 
 	static loadLists() {
 		const listsElement = document.getElementById("lists-container");
 		listsElement.innerHTML = "";
 		lists.forEach((list) => {
 			listsElement.innerHTML += `
-            <div class="border-2 border-black rounded-4xl w-9/10 overflow-hidden flex flex-col items-center">
-                <div id="${list.id}" class="px-7 py-3 h-14 flex items-center justify-between w-full">
+            <div id=${list.id} class="border-2 border-black rounded-4xl w-9/10 overflow-hidden flex flex-col items-center">
+                <div id="${list.id}-list" class="px-7 py-3 h-14 flex items-center justify-between w-full">
                     <div class="flex gap-x-3 items-center">
                         <img class="svg" src="../svgs/arrow_drop_down.svg" alt="expand to view tasks" />
                         <div id="${list.id}-name"><span class="text-2xl">${list.name}</span></div>
