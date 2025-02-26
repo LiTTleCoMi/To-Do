@@ -10,7 +10,7 @@ class Task {
         <div id="${this.id}-${this.taskId}" class="flex justify-between py-1 px-3 border-2 border-black w-9/10 mb-3 rounded-2xl h-12">
             <div class="flex items-center gap-x-3">
                 <img class="svg" src="../svgs/menu.svg" alt="reorder drag drop" />
-                <img class="svg" src="../svgs/check_box_outline_blank.svg" alt="mark this task as done" />
+                <img onclick="List.toggleTaskCompletion(${this.id}, ${this.taskId})" class="svg" src="../svgs/${this.complete ? 'check_box' : 'check_box_outline_blank'}.svg" alt="mark this task as done" />
                 <div id="${this.id}-${this.taskId}-task"><input class="text-xl" type="text" placeholder="Task" /></div>
             </div>
             <div class="flex items-center gap-x-3">
@@ -37,7 +37,14 @@ class List {
 		this.name = name;
 		this.tasks = tasks;
 		this.showTasks = showTasks;
-	}
+    }
+
+    static toggleTaskCompletion(id, taskId) {
+        let list = lists.find(l => l.id == id);
+        let task = list.tasks.find(t => t.taskId == taskId);
+        task.complete = !task.complete;
+        this.loadLists();
+    }
 
 	static deleteTask(id, taskId) {
         let list = lists.find((d) => d.id == id);
@@ -49,7 +56,6 @@ class List {
 
 	static toggleTasks(id) {
 		let list = lists.find((i) => i.id == id);
-		console.log(list);
 		list.showTasks = !list.showTasks;
 		List.loadLists();
 	}
@@ -84,28 +90,20 @@ class List {
 	static updateName(id, setting = "input", taskId = "") {
 		let element, item;
 		if (taskId === "") {
-			console.log("list");
 			element = document.getElementById(`${id}-name`);
 			item = lists.find((thisItem) => thisItem.id === id);
 		} else {
-			console.log(taskId);
-			console.log("task");
 			element = document.getElementById(`${id}-${taskId}-task`);
-			console.log(id);
 			item = lists
 				.find((thisItem) => thisItem.id == id)
 				.tasks.find((t) => t.taskId === taskId);
-			console.log(item);
 		}
 
 		if (setting === "input") {
-			console.log("input");
 			const inputElement = element.querySelector("input");
-			console.log(element.innerHTML);
 			item.name = inputElement.value === "" ? "Unnamed" : inputElement.value;
 			this.loadLists();
 		} else if (setting === "span") {
-			console.log("span");
 			element.innerHTML = `<input type="text" class="text-${
 				taskId === "" ? "2xl" : "xl"
 			}" placeholder="List Name" />`;
@@ -125,14 +123,12 @@ class List {
 
 	static deleteList(id) {
 		lists = lists.filter((item) => item.id != id);
-		console.log();
 		this.loadLists();
 	}
 
 	static createTask(id) {
 		const list = lists.find((item) => item.id === id);
 		list.showTasks = true;
-		console.log(list);
 		list.tasks.push(new Task(id));
 	}
 
@@ -163,7 +159,7 @@ class List {
                     <div id="${list.id}-${i}" class="flex justify-between py-1 px-3 border-2 border-black w-9/10 mb-3 rounded-2xl h-12">
                         <div class="flex items-center gap-x-3">
                             <img class="svg" src="../svgs/menu.svg" alt="reorder drag drop" />
-                            <img id="${list.id}-${i}-task-completion" class="svg" src="../svgs/check_box_outline_blank.svg" alt="mark this task as done" />
+                            <img onclick="List.toggleTaskCompletion(${task.id}, ${task.taskId})" class="svg" src="../svgs/${task.complete ? 'check_box' : 'check_box_outline_blank'}.svg" alt="mark this task as done" />
                             <div id="${list.id}-${i}-task"><span class="text-xl">${task.name}</span></div>
                         </div>
                         <div class="flex items-center gap-x-3">
