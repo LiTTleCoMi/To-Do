@@ -1,15 +1,15 @@
 class Task {
-	constructor(id, taskId = -1, name = "Unnamed", complete = false) {
-		this.id = id;
-		this.taskId = taskId;
-		this.name = name;
-		this.complete = complete;
+    constructor(id, taskId = -1, name = "Unnamed", complete = false) {
+        this.id = id;
+        this.taskId = taskId;
+        this.name = name;
+        this.complete = complete;
 
-		const tasksElement = document.getElementById(id);
-		tasksElement.innerHTML += `
+        const tasksElement = document.getElementById(id);
+        tasksElement.innerHTML += `
         <div id="${this.id}-${this.taskId}" class="flex justify-between py-1 px-3 border-2 border-black w-9/10 mb-3 rounded-2xl h-12">
             <div class="flex items-center gap-x-3">
-                <img class="svg" src="../svgs/menu.svg" alt="reorder drag drop" />
+                <img class="svg drag-drop" src="../svgs/menu.svg" alt="reorder drag drop" />
                 <img onclick="List.toggleTaskCompletion(${this.id}, ${this.taskId})" class="svg" src="../svgs/${this.complete ? 'check_box' : 'check_box_outline_blank'}.svg" alt="mark this task as done" />
                 <div id="${this.id}-${this.taskId}-task"><input class="text-xl" type="text" placeholder="Task" /></div>
             </div>
@@ -18,15 +18,16 @@ class Task {
                 <img onclick="List.deleteTask(${this.id}, ${this.taskId})" class="svg" src="../svgs/delete.svg" alt="delete this task" />
             </div>
         </div>`;
-		const inputElement = document
-			.getElementById(`${this.id}-${this.taskId}-task`)
-			.querySelector("input");
 
-		inputElement.focus();
-		inputElement.addEventListener("blur", () =>
-			List.updateName(this.id, "input", this.taskId)
-		);
-	}
+        // bring the input box to focus and wait for it to be unfocused to then update the name
+        const inputElement = document
+            .getElementById(`${this.id}-${this.taskId}-task`)
+            .querySelector("input");
+        inputElement.focus();
+        inputElement.addEventListener("blur", () =>
+            List.updateName(this.id, "input", this.taskId)
+        );
+    }
 }
 
 var lists = [];
@@ -57,7 +58,7 @@ class List {
 	static toggleTasks(id) {
 		let list = lists.find((i) => i.id == id);
 		list.showTasks = !list.showTasks;
-		List.loadLists();
+		this.loadLists();
 	}
 
 	static createList() {
@@ -88,7 +89,8 @@ class List {
 	}
 
 	static updateName(id, setting = "input", taskId = "") {
-		let element, item;
+        let element, item;
+        // determine if its a task or a list being named and change variable values based on that
 		if (taskId === "") {
 			element = document.getElementById(`${id}-name`);
 			item = lists.find((thisItem) => thisItem.id === id);
@@ -99,6 +101,7 @@ class List {
 				.tasks.find((t) => t.taskId === taskId);
 		}
 
+        // determine if its an input box that needs to be changed to a span or a span that needs to be changed to an input
 		if (setting === "input") {
 			const inputElement = element.querySelector("input");
 			item.name = inputElement.value === "" ? "Unnamed" : inputElement.value;
@@ -136,7 +139,7 @@ class List {
 		console.log("Loading...");
 		const listsElement = document.getElementById("lists-container");
 		listsElement.innerHTML = "";
-		lists.forEach((list) => {
+        lists.forEach((list) => {
 			listsElement.innerHTML += `
             <div id=${list.id} class="border-2 border-black rounded-4xl w-9/10 overflow-hidden flex flex-col items-center">
                 <div id="${list.id}-list" class="px-7 py-3 h-14 flex items-center justify-between w-full">
@@ -158,7 +161,7 @@ class List {
 					tasksElement.innerHTML += `
                     <div id="${list.id}-${i}" class="flex justify-between py-1 px-3 border-2 border-black w-9/10 mb-3 rounded-2xl h-12">
                         <div class="flex items-center gap-x-3">
-                            <img class="svg" src="../svgs/menu.svg" alt="reorder drag drop" />
+                            <img class="svg drag-drop" src="../svgs/menu.svg" alt="reorder drag drop" />
                             <img onclick="List.toggleTaskCompletion(${task.id}, ${task.taskId})" class="svg" src="../svgs/${task.complete ? 'check_box' : 'check_box_outline_blank'}.svg" alt="mark this task as done" />
                             <div id="${list.id}-${i}-task"><span class="text-xl">${task.name}</span></div>
                         </div>
@@ -169,12 +172,28 @@ class List {
                     </div>`;
 				});
 			}
-		});
-	}
+        });
+        // save lists after every update
+        this.saveLists();
+    }
+
+    static saveLists() {
+        localStorage.clear();
+        lists.forEach((list, i) => {
+            localStorage.setItem(i, JSON.stringify(list));
+        });
+    }
+
+    static loadStoredLists() {
+        for (let i = 0; i < localStorage.length; i++) {
+            let value = JSON.parse(localStorage.getItem(i));
+            lists.push(value);
+        }
+    }
 }
 
 // Initialize lists and load them
 (() => {
-	lists = [new List(`${Date.now()}`, "Sample List")];
+    List.loadStoredLists();
 	List.loadLists();
 })();
