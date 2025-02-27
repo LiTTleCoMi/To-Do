@@ -187,7 +187,9 @@ class List {
     static loadStoredLists() {
         for (let i = 0; i < localStorage.length; i++) {
             let value = JSON.parse(localStorage.getItem(i));
-            lists.push(value);
+            if (value !== null) {
+                lists.push(value);
+            }
         }
     }
 }
