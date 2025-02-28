@@ -7,17 +7,16 @@ class Task {
 
         const tasksElement = document.getElementById(id);
         tasksElement.innerHTML += `
-        <div id="${this.id}-${this.taskId}" class="flex justify-between py-1 px-3 border-2 border-black w-9/10 mb-3 rounded-2xl h-12">
+        <div id="${id}-${taskId}" class="flex gap-y-1 min-h-fit items-center justify-between py-1 px-3 border-2 border-black w-9/10 mb-3 rounded-2xl h-12 gap-x-3">
             <div class="flex items-center gap-x-3">
-                <img class="svg drag-drop" src="../svgs/menu.svg" alt="reorder drag drop" />
-                <img onclick="List.toggleTaskCompletion(${this.id}, ${this.taskId})" class="svg" src="../svgs/${this.complete ? 'check_box' : 'check_box_outline_blank'}.svg" alt="mark this task as done" />
-                <div id="${this.id}-${this.taskId}-task"><input class="text-xl" type="text" placeholder="Task" /></div>
+                <img onclick="List.toggleTaskCompletion(${id}, ${taskId})" class="svg" src="../svgs/${complete ? 'check_box' : 'check_box_outline_blank'}.svg" alt="mark this task as done" />
+                <div id="${id}-${taskId}-task" class=""><input class="text-xl" type="text" placeholder="Task" /></div>
             </div>
-            <div class="flex items-center gap-x-3">
-                <img onclick="List.updateName(${this.id}, 'span', ${this.taskId})" class="svg" src="../svgs/edit.svg" alt="edit the name of this task" />
-                <img onclick="List.deleteTask(${this.id}, ${this.taskId})" class="svg" src="../svgs/delete.svg" alt="delete this task" />
+            <div class="flex flex-col-reverse sm:flex-row items-center gap-x-3 gap-y-1 min-w-fit min-h-fit">
+                <img onclick="List.updateName(${id}, 'span', ${taskId})" class="svg" src="../svgs/edit.svg" alt="edit the name of this task" />
+                <img onclick="List.deleteTask(${id}, ${taskId})" class="svg" src="../svgs/delete.svg" alt="delete this task" />
             </div>
-        </div>`;
+        </div>`
 
         // bring the input box to focus and wait for it to be unfocused to then update the name
         const inputElement = document
@@ -63,20 +62,20 @@ class List {
 
 	static createList() {
 		let id = `${Date.now()}`;
-		let myList = new List(id);
-		lists.push(myList);
+		let list = new List(id);
+		lists.push(list);
 		const listsElement = document.getElementById("lists-container");
 		listsElement.innerHTML += `
-        <div id=${id} class="border-2 border-black rounded-4xl w-9/10 overflow-hidden flex flex-col items-center">
-            <div id="${id}-list" class="px-7 py-3 h-14 flex items-center justify-between w-full">
+        <div id=${list.id} class="border-2 border-black rounded-4xl w-9/10 overflow-hidden flex flex-col items-center">
+            <div id="${list.id}-list" class="px-7 py-3 min-h-fit h-14 flex items-center justify-between w-full gap-y-1 gap-x-3">
                 <div class="flex gap-x-3 items-center">
-                    <img onclick="List.toggleTasks(${id})" class="svg" src="../svgs/arrow_drop_down.svg" alt="expand to view tasks" />
-                    <div id="${id}-name"><input type="text" class="text-2xl" placeholder="List Name" /></div>
+                    <img  onclick="List.toggleTasks(${list.id})" class="svg" src="../svgs/arrow_drop_down.svg" alt="expand to view tasks" />
+                    <div id="${list.id}-name"><input type="text" class="text-2xl" placeholder="List Name" /></div>
                 </div>
-                <div class="flex justify-center gap-x-3">
-                    <img onclick="List.updateName('${id}', 'span')" class="svg" src="../svgs/edit.svg" alt="edit the name of this task" />
-                    <img onclick="List.createTask(${id})" class="svg" src="../svgs/add.svg" alt="add a task to this list" />
-                    <img onclick="List.deleteList(${id})" class="svg" src="../svgs/delete.svg" alt="delete this list" />
+                <div class="flex flex-col-reverse sm:flex-row justify-center gap-x-3 min-w-fit min-h-fit">
+                    <img onclick="List.updateName('${list.id}', 'span')" class="svg" src="../svgs/edit.svg" alt="edit the name of this task" />
+                    <img onclick="List.createTask('${list.id}')" class="svg" src="../svgs/add.svg" alt="add a task to this list" />
+                    <img onclick="List.deleteList('${list.id}')" class="svg" src="../svgs/delete.svg" alt="delete this list" />
                 </div>
             </div>
         </div>`;
@@ -142,12 +141,12 @@ class List {
         lists.forEach((list) => {
 			listsElement.innerHTML += `
             <div id=${list.id} class="border-2 border-black rounded-4xl w-9/10 overflow-hidden flex flex-col items-center">
-                <div id="${list.id}-list" class="px-7 py-3 h-14 flex items-center justify-between w-full">
+                <div id="${list.id}-list" class="px-7 py-3 min-h-fit h-14 flex items-center justify-between w-full gap-y-1 gap-x-3">
                     <div class="flex gap-x-3 items-center">
                         <img  onclick="List.toggleTasks(${list.id})" class="svg" src="../svgs/arrow_drop_down.svg" alt="expand to view tasks" />
                         <div id="${list.id}-name"><span class="text-2xl">${list.name}</span></div>
                     </div>
-                    <div class="flex justify-center gap-x-3">
+                    <div class="flex flex-col-reverse sm:flex-row justify-center gap-x-3 min-w-fit min-h-fit">
                         <img onclick="List.updateName('${list.id}', 'span')" class="svg" src="../svgs/edit.svg" alt="edit the name of this task" />
                         <img onclick="List.createTask('${list.id}')" class="svg" src="../svgs/add.svg" alt="add a task to this list" />
                         <img onclick="List.deleteList('${list.id}')" class="svg" src="../svgs/delete.svg" alt="delete this list" />
@@ -159,13 +158,12 @@ class List {
 				list.tasks.forEach((task, i) => {
 					task.taskId = i;
 					tasksElement.innerHTML += `
-                    <div id="${list.id}-${i}" class="flex justify-between py-1 px-3 border-2 border-black w-9/10 mb-3 rounded-2xl h-12">
+                    <div id="${list.id}-${i}" class="flex gap-y-1 min-h-fit items-center justify-between py-1 px-3 border-2 border-black w-9/10 mb-3 rounded-2xl h-12 gap-x-3">
                         <div class="flex items-center gap-x-3">
-                            <img class="svg drag-drop" src="../svgs/menu.svg" alt="reorder drag drop" />
                             <img onclick="List.toggleTaskCompletion(${task.id}, ${task.taskId})" class="svg" src="../svgs/${task.complete ? 'check_box' : 'check_box_outline_blank'}.svg" alt="mark this task as done" />
-                            <div id="${list.id}-${i}-task"><span class="text-xl">${task.name}</span></div>
+                            <div id="${list.id}-${i}-task" class=""><span class="text-xl">${task.name}</span></div>
                         </div>
-                        <div class="flex items-center gap-x-3">
+                        <div class="flex flex-col-reverse sm:flex-row items-center gap-x-3 gap-y-1 min-w-fit min-h-fit">
                             <img onclick="List.updateName(${list.id}, 'span', ${task.taskId})" class="svg" src="../svgs/edit.svg" alt="edit the name of this task" />
                             <img onclick="List.deleteTask(${list.id}, ${task.taskId})" class="svg" src="../svgs/delete.svg" alt="delete this task" />
                         </div>
